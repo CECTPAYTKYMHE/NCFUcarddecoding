@@ -16,7 +16,7 @@ filein = input('Полный путь до файла > ')
 wb = openpyxl.load_workbook(filein)
 ws = wb['spisok']
 
-i = 2
+i = 1
 row = ws.max_row
 try:
     while i != row + 1: #перебор значений 4 столбца, перекодировка и запись обратно в книгу
