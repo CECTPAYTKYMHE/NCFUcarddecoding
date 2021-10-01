@@ -8,13 +8,13 @@ def decoding(ID):
     while i > -1: #цикл переворачивания байт
         IDnew.append(ID[i:i+2])
         i -= 2
-    l = list(map(''.join, IDnew)) #обьединение списка списков
-    l = ''.join(l) #из списка в строку
-    l = int(l, 16)#из hex в dec
-    return l
+    ncfuid = list(map(''.join, IDnew)) #обьединение списка списков
+    ncfuid = ''.join(ncfuid) #из списка в строку
+    ncfuid = int(ncfuid, 16)#из hex в dec
+    return ncfuid
 filein = input('Полный путь до файла > ')    
 wb = openpyxl.load_workbook(filein)
-ws = wb['spisok']
+ws = wb['Лист1']
 
 i = 1
 row = ws.max_row
