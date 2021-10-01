@@ -18,13 +18,16 @@ ws = wb['spisok']
 
 i = 2
 row = ws.max_row
-while i != row + 1: #перебор значений 4 столбца, перекодировка и запись обратно в книгу
-    cell_obj = ws.cell(row=i, column=4)
-    cell_obj = str(cell_obj.value)
-    #cell_obj = int(cell_obj)
-    ws.cell(row=i, column=4).value = decoding(cell_obj)
-    i += 1
-wb.save(filename = filein)
+try:
+    while i != row + 1: #перебор значений 4 столбца, перекодировка и запись обратно в книгу
+        cell_obj = ws.cell(row=i, column=4)
+        cell_obj = str(cell_obj.value)
+        #cell_obj = int(cell_obj)
+        ws.cell(row=i, column=4).value = decoding(cell_obj)
+        i += 1
+    wb.save(filename = filein)
+except:
+    print('Что-то пошло не так')
     
     
     
