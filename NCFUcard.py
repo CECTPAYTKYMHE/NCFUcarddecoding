@@ -10,7 +10,7 @@ def decoding(ID):
         i -= 2
     l = list(map(''.join, IDnew)) #обьединение списка списков
     l = ''.join(l) #из списка в строку
-    l = int(l, 16)
+    l = int(l, 16)#из hex в dec
     return l
 filein = input('Полный путь до файла > ')    
 wb = openpyxl.load_workbook(filein)
