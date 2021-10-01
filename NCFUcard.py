@@ -27,7 +27,7 @@ try:
         i += 1
     wb.save(filename = filein)
 except:
-    print('Что-то пошло не так')
+    print('Что-то пошло не так!')
     
     
     
