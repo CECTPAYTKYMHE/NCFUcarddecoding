@@ -3,22 +3,23 @@ from openpyxl import load_workbook
 from openpyxl_image_loader import SheetImageLoader
 
 #filein = input('Полный путь до файла > ') 
-filein = 'D:\\GIT\\Files\\cpamexport\\student.xlsx'
-wb = openpyxl.load_workbook('D:\\GIT\\Files\\cpamexport\\student.xlsx')
+filein = 'D:\\GIT\\Files\\cpamexport\\employ.xlsx'
+wb = openpyxl.load_workbook(filein)
 ws = wb['Лист1']
 
 
-i = 3
+i = 3 #начальная строка
 row = ws.max_row
 image_loader = SheetImageLoader(ws)
-while i != row + 1:
+while i != row: #проверить конечную строку!!!!
     ID = ws.cell(row=i, column=1)
     ID = str(ID.value)
     ID = ID.replace('-','')
-    image = image_loader.get('E' + str(i))
-    image.save('d:\\git\\files\\photo\\' + ID + '.jpg')
-    ws.cell(row=i, column=5).value = ID +'.jpg'
+    image = image_loader.get('F' + str(i)) #клетка с фотографией
+    image.save('d:\\git\\files\\photo\\' + ID + '.jpg') #экспорт фото
+    ws.cell(row=i, column=5).value = ID +'.jpg' #имяфото.jpg
+    ws.cell(row=i, column=1).value = ID #удаление '-' в NCFUGUID
     i += 1
-ws._images = []
+ws._images = [] # удаление всех фото из файла
 wb.save(filename = filein)
 
