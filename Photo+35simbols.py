@@ -1,7 +1,7 @@
 import openpyxl
 from openpyxl_image_loader import SheetImageLoader
 
-filein = 'D:\\GIT\\Files\\cpamexport\\student.xlsx'
+filein = 'D:\\GIT\\Files\\cpamexport\\employee.xlsx'
 #filein = input('Полный путь до файла > ')    
 wb = openpyxl.load_workbook(filein)
 ws = wb['Лист1']
@@ -11,7 +11,7 @@ row = ws.max_row
 image_loader = SheetImageLoader(ws)
 try:
     ws.cell(row=1, column=1).value = 'ID'
-    #ws.cell(row=1, column=6).value = 'Должность'
+    ws.cell(row=1, column=6).value = 'Должность'
     ws.cell(row=1, column=8).value = 'Фотография №'
     while i != row: #перебор значений 4 столбца, перекодировка и запись обратно в книгу
         ID = ws.cell(row=i, column=1)

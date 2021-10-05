@@ -21,7 +21,7 @@ while i != row:
         part1 = ' '.join(part1)
         part2 = ' '.join(part2)
         if len(part1) > 35 or len(part2) > 35:
-            print(f'"{part1}" или "{part2}" больше 35 символов')
+            print(f'"{part1}" или "{part2}" в строке {i} больше 35 символов')
             break
         else:
             ws.cell(row=i, column=5).value = part1
