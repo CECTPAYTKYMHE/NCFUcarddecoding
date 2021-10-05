@@ -1,5 +1,6 @@
 import openpyxl
 from openpyxl_image_loader import SheetImageLoader
+import pandas as pd
 
 filein = 'D:\\GIT\\Files\\cpamexport\\employee.xlsx'
 #filein = input('Полный путь до файла > ')    
@@ -17,9 +18,10 @@ try:
         ID = ws.cell(row=i, column=1)
         ID = str(ID.value)
         ID = ID.replace('-','')
+        ID = ID.upper()
         image = image_loader.get('F' + str(i)) #клетка с фотографией
         image.save('d:\\git\\files\\photo\\' + ID + '.jpg') #экспорт фото
-        ws.cell(row=i, column=8).value = ID +'.jpg' #имяфото.jpg
+        ws.cell(row=i, column=8).value = 'd:\\git\\files\\photo\\' + ID +'.jpg' #имяфото.jpg
         ws.cell(row=i, column=1).value = ID #удаление '-' в NCFUGUID
         ws._images = []
         cell_obj = ws.cell(row=i, column=5)
@@ -41,5 +43,8 @@ try:
         i += 1
     
     wb.save(filename = filein)
+    data_xls = pd.read_excel(filein, dtype=str, index_col=None)
+    data_xls.to_csv('d:\\git\\files\\export.csv', encoding='utf-8', index=False)
+
 except:
     print('Что-то пошло не так!')
