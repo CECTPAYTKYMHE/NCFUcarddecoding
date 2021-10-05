@@ -13,7 +13,7 @@ try:
     ws.cell(row=1, column=1).value = 'ID'
     ws.cell(row=1, column=6).value = 'Должность'
     ws.cell(row=1, column=8).value = 'Фотография №'
-    while i != row: #перебор значений 4 столбца, перекодировка и запись обратно в книгу
+    while i != row:
         ID = ws.cell(row=i, column=1)
         ID = str(ID.value)
         ID = ID.replace('-','')
