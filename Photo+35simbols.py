@@ -46,7 +46,7 @@ try:
     
     wb.save(filename = filein)
     data_xls = pd.read_excel(filein, dtype=str, index_col=None)
-    data_xls.to_csv('d:\\git\\files\\export.csv', encoding='utf-8', index=False)
+    data_xls.to_csv('d:\\git\\files\\export.csv', encoding='cp1251', index=False)
 
 except:
     print('Что-то пошло не так!')
