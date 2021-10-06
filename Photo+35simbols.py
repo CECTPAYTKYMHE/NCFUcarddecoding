@@ -30,8 +30,10 @@ try:
             cell_obj = cell_obj.value.split()
             n = len(cell_obj) / 2
             n = int(n)
-            part1 = cell_obj[0:n + 1]
-            part2 = cell_obj[n + 1:len(cell_obj)]
+            if len(cell_obj[n-1]) <= 3:
+               n += 1
+            part1 = cell_obj[0:n]
+            part2 = cell_obj[n:len(cell_obj)]
             part1 = ' '.join(part1)
             part2 = ' '.join(part2)
             if len(part1) > 35 or len(part2) > 35:
