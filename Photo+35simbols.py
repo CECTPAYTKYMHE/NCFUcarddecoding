@@ -2,24 +2,24 @@ import openpyxl
 from openpyxl_image_loader import SheetImageLoader
 import pandas as pd
 
-filein = 'D:\\GIT\\Files\\cpamexport\\employee.xlsx'
+filein = 'D:\\GIT\\Files\\cpamexport\\student.xlsx'
 #filein = input('Полный путь до файла > ')    
 wb = openpyxl.load_workbook(filein)
 ws = wb['Лист1']
 
-i = 2
+i = 3
 row = ws.max_row
 image_loader = SheetImageLoader(ws)
 try:
     ws.cell(row=1, column=1).value = 'ID'
     ws.cell(row=1, column=6).value = 'Должность'
     ws.cell(row=1, column=8).value = 'Фотография №'
-    while i != row:
+    while i != row + 1:
         ID = ws.cell(row=i, column=1)
         ID = str(ID.value)
         ID = ID.replace('-','')
-        ID = ID.upper()
-        image = image_loader.get('F' + str(i)) #клетка с фотографией
+        #ID = ID.upper()
+        image = image_loader.get('E' + str(i)) #клетка с фотографией
         image.save('d:\\git\\files\\photo\\' + ID + '.jpg') #экспорт фото
         ws.cell(row=i, column=8).value = 'd:\\git\\files\\photo\\' + ID +'.jpg' #имяфото.jpg
         ws.cell(row=i, column=1).value = ID #удаление '-' в NCFUGUID
