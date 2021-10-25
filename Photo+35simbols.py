@@ -23,8 +23,8 @@ try:
         image.save('d:\\git\\files\\photo\\' + ID + '.jpg') #экспорт фото
         ws.cell(row=i, column=8).value = 'd:\\git\\files\\photo\\' + ID +'.jpg' #имяфото.jpg
         ws.cell(row=i, column=1).value = ID #удаление '-' в NCFUGUID
-        ws._images = []
-        cell_obj = ws.cell(row=i, column=5)
+        ws._images = [] #удаляем все фотки из xlsx
+        cell_obj = ws.cell(row=i, column=5) #дробление должности на несколько клеток если кол-во символов больше 35
         if len(cell_obj.value) > 35:
             lenght = len(cell_obj.value)
             cell_obj = cell_obj.value.split()
