@@ -8,7 +8,7 @@ wb = openpyxl.load_workbook(filein)
 ws = wb['Лист1']
 
 
-i = 3 #начальная строка
+i = 2 #начальная строка
 row = ws.max_row
 image_loader = SheetImageLoader(ws)
 while i != row + 1: #проверить конечную строку!!!!

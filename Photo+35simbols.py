@@ -7,7 +7,7 @@ filein = 'D:\\GIT\\Files\\cpamexport\\student.xlsx'
 wb = openpyxl.load_workbook(filein)
 ws = wb['Лист1']
 
-i = 3
+i = 2
 row = ws.max_row
 image_loader = SheetImageLoader(ws)
 try:
@@ -19,7 +19,7 @@ try:
         ID = str(ID.value)
         ID = ID.replace('-','')
         #ID = ID.upper()
-        image = image_loader.get('E' + str(i)) #клетка с фотографией
+        image = image_loader.get('H' + str(i)) #клетка с фотографией
         image.save('d:\\git\\files\\photo\\' + ID + '.jpg') #экспорт фото
         ws.cell(row=i, column=8).value = 'd:\\git\\files\\photo\\' + ID +'.jpg' #имяфото.jpg
         ws.cell(row=i, column=1).value = ID #удаление '-' в NCFUGUID
