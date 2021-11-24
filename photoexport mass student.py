@@ -31,8 +31,8 @@ for file in files:
                 ws.cell(row=i, column=5).value = ID + '.jpg' #имяфото.jpg
             except:
                 logs = open('D:\\GIT\\Files\\student\\errorlogs.txt', 'a')
-                print(f'Неправильная фотка в строке {str(i)} у студента {ws.cell(row=i, column=2).value} {ws.cell(row=i, column=3).value} {ws.cell(row=i, column=4).value}')
-                logs.write(f'Неправильная фотка в строке {str(i)} у студента {ws.cell(row=i, column=2).value} {ws.cell(row=i, column=3).value} {ws.cell(row=i, column=4).value}\n')
+                print(f'<Неправильная фотография в файле {cwd[21:]}\{file} в строке {str(i)} у студента {ws.cell(row=i, column=2).value} {ws.cell(row=i, column=3).value} {ws.cell(row=i, column=4).value}>')
+                logs.write(f'<Неправильная фотография в файле {cwd[21:]}{file} в строке {str(i)} у студента {ws.cell(row=i, column=2).value} {ws.cell(row=i, column=3).value} {ws.cell(row=i, column=4).value}>\n')
                 logs.close()
                 pass
             ws.cell(row=i-1, column=6).value = 'Student'
