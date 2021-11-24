@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-cwd = os.path.abspath('D:\\GIT\\Files\\work')
+cwd = os.path.abspath('D:\\GIT\\card')
 files = os.listdir(cwd)
 filesdata = []
 for file in files:
@@ -12,4 +12,4 @@ for file in files:
 
 appended_xlsx = pd.concat(filesdata)
 
-appended_xlsx.to_excel('D:\\GIT\\Files\\work\\allemployee.xlsx', index=False)
+appended_xlsx.to_excel('D:\\GIT\\card\\allemployee.xlsx', index=False)

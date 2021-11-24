@@ -32,4 +32,3 @@ for file in files:
         print(f'{file} успех')
     except:
         print(f'{file} завершился неудачно')
-
