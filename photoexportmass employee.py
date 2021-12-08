@@ -1,7 +1,7 @@
 import openpyxl
 from openpyxl_image_loader import SheetImageLoader
 import os
-cwd = os.path.abspath('D:\\GIT\\Files\\work')
+cwd = os.path.abspath('D:\\GIT\\Files\\employee')
 files = os.listdir(cwd)
 
 for file in files:
@@ -22,7 +22,7 @@ for file in files:
             ID = ID.replace('-','')
             ID = ID.upper()
             image = image_loader.get('H' + str(i)) #клетка с фотографией
-            image.save('d:\\git\\files\\photo\\employee\\' + ID + '.jpg') #экспорт фото
+            image.save('d:\\git\\files\\empphoto\\' + ID + '.jpg') #экспорт фото
             ws.cell(row=i, column=5).value = ID +'.jpg' #имяфото.jpg
             ws.cell(row=i, column=1).value = ID #удаление '-' в NCFUGUID
             i += 1

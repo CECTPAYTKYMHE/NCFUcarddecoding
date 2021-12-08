@@ -5,7 +5,7 @@ import csv
 import io
 import glob
 from PIL import Image
-cwd = 'D:\\GIT\\Files\\student\\'
+cwd = 'D:\\GIT\\Files\\student\\spo\\'
 files = [f for f in glob.glob(cwd + '**/*.xlsx', recursive=True)]
 Image.MAX_IMAGE_PIXELS = None
 try:
@@ -41,7 +41,7 @@ for file in files:
             try:
                 image = image_loader.get('E' + str(i)) #клетка с фотографией
                 if image.format.lower() in ['jpg', 'jpeg']:
-                    image.save('d:\\git\\files\\student\\photo\\' + ID + '.jpg') #экспорт фото
+                    image.save('d:\\git\\files\\student\\spo\\photo\\' + ID + '.jpg') #экспорт фото
                     ws.cell(row=i, column=5).value = ID + '.jpg' #имяфото.jpg
                 else:
                     logs = open(f'D:\\GIT\\Files\\student\\errorlogs.csv','a')
