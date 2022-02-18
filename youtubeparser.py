@@ -28,12 +28,12 @@ def like(video_url):
 
 def searcher():
     i = 5
-    res = YoutubeSearch('ted talk', max_results=i).to_dict()
+    res = YoutubeSearch('хохмач', max_results=i).to_dict()
     for k in range(i):
         likes = like('https://www.youtube.com/' + res[k]['url_suffix'])
         res[k]['likes'] = likes
         
-        with open('d:/GIT/NCFUcarddecoding/file.csv','a',newline='') as f:
+        with open('C:/GIT/NCFUcarddecoding/file.csv','a',newline='') as f:
             w = csv.DictWriter(f,res[k].keys())
             # w.writeheader()
             w.writerow(res[k])
