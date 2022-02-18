@@ -1,15 +1,23 @@
 import os
 import pandas as pd
-cwd = os.path.abspath('D:\\GIT\\Files\\student\\2 курс очная форма')
-files = os.listdir(cwd)
+import glob
+import openpyxl
+cwd = 'D:\\GIT\\Files\\выгрузки\\241221\\готовое\\rej\\'
+files = [f for f in glob.glob(cwd + '**/*.xlsx', recursive=True)]
 filesdata = []
 for file in files:
+    wb = openpyxl.load_workbook(file)
+    ws = wb.worksheets[0]
+    ws._images = []
+   # ws.delete_rows(1)
+    wb.save(filename = file)
+    wb.close()
     print(file)
-    k = pd.read_excel(cwd + '\\' + file)
+    k = pd.read_excel(file)
     filesdata.append(k)
 
 
 
 appended_xlsx = pd.concat(filesdata)
 
-appended_xlsx.to_excel('D:\\GIT\\Files\\student\\2 курс очная форма\\course2.xlsx', index=False)
+appended_xlsx.to_excel('D:\\GIT\\Files\\выгрузки\\241221\\готовое\\rej\\rej.xlsx', index=False)

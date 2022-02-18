@@ -5,11 +5,11 @@ import csv
 import io
 import glob
 from PIL import Image
-cwd = 'D:\\GIT\\Files\\student\\spo\\'
+cwd = 'D:\\GIT\\Files\\student010222\\'
 files = [f for f in glob.glob(cwd + '**/*.xlsx', recursive=True)]
 Image.MAX_IMAGE_PIXELS = None
 try:
-    logs = open(f'D:\\GIT\\Files\\student\\errorlogs.csv', 'x')
+    logs = open(f'{cwd}errorlogs.csv', 'x')
     logs.write('Ошибка фотографии в файле, Строка, ФИО\n')
     logs.close()
 except:
@@ -27,30 +27,31 @@ for file in files:
         ws.cell(row=1, column=2).value = 'Фамилия'
         ws.cell(row=1, column=3).value = 'Имя'
         ws.cell(row=1, column=4).value = 'Отчество'
-        ws.cell(row=1, column=5).value = 'Фотография №'
-        #ws.cell(row=1, column=6).value = 'Role'
+        ws.cell(row=1, column=5).value = 'Подразделение'
+        ws.cell(row=1, column=6).value = 'Курс'
+        ws.cell(row=1, column=7).value = 'Фотография №'
         while i != row + 1: #проверить конечную строку!!!!
             ID = ws.cell(row=i, column=1)
             ID = str(ID.value)
             ID = ID.replace('-','')
             ID = ID.upper()
             try:
-                ws.unmerge_cells(start_row=i, start_column=5, end_row=i, end_column=6)
+                ws.unmerge_cells(start_row=i, start_column=7, end_row=i, end_column=8)
             except:
                 pass
             try:
-                image = image_loader.get('E' + str(i)) #клетка с фотографией
+                image = image_loader.get('G' + str(i)) #клетка с фотографией
                 if image.format.lower() in ['jpg', 'jpeg']:
-                    image.save('d:\\git\\files\\student\\spo\\photo\\' + ID + '.jpg') #экспорт фото
-                    ws.cell(row=i, column=5).value = ID + '.jpg' #имяфото.jpg
+                    image.save(f'{cwd}photo\\{ID}.jpg') #экспорт фото
+                    ws.cell(row=i, column=7).value = ID + '.jpg' #имяфото.jpg
                 else:
-                    logs = open(f'D:\\GIT\\Files\\student\\errorlogs.csv','a')
+                    logs = open(f'{cwd}errorlogs.csv','a')
                     print(f'<Неправильная фотография в файле {file} в строке {i-1} у студента {ws.cell(row=i, column=2).value} {ws.cell(row=i, column=3).value} {ws.cell(row=i, column=4).value}>')
                     logs.write(f'{file}, {i-1}, {ws.cell(row=i, column=2).value} {ws.cell(row=i, column=3).value} {ws.cell(row=i, column=4).value} \n')
                     logs.close()
                     pass
             except:
-                logs = open(f'D:\\GIT\\Files\\student\\errorlogs.csv','a')
+                logs = open(f'{cwd}errorlogs.csv','a')
                 print(f'<Неправильная фотография в файле {file} в строке {i-1} у студента {ws.cell(row=i, column=2).value} {ws.cell(row=i, column=3).value} {ws.cell(row=i, column=4).value}>')
                 logs.write(f'{file}, {i-1}, {ws.cell(row=i, column=2).value} {ws.cell(row=i, column=3).value} {ws.cell(row=i, column=4).value} \n')
                 logs.close()
@@ -62,6 +63,8 @@ for file in files:
             ws.cell(row=i-1, column=3).value = ws.cell(row=i, column=3).value
             ws.cell(row=i-1, column=4).value = ws.cell(row=i, column=4).value
             ws.cell(row=i-1, column=5).value = ws.cell(row=i, column=5).value
+            ws.cell(row=i-1, column=6).value = ws.cell(row=i, column=6).value
+            ws.cell(row=i-1, column=7).value = ws.cell(row=i, column=7).value
             i += 1
         ws._images = [] # удаление всех фото из файла
         #ws.delete_cols(7, 2) # удаление столбцов с 7 по 9(7 + 2)
