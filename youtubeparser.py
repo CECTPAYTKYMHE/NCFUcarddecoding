@@ -2,6 +2,7 @@ from youtube_search import YoutubeSearch
 import json
 import csv
 import pandas as pd
+import time
 def like(video_url):
     from requests_html import HTMLSession 
     from bs4 import BeautifulSoup as bs # importing BeautifulSoup
@@ -27,16 +28,18 @@ def like(video_url):
     return likes_str
 
 def searcher():
-    i = 5
-    res = YoutubeSearch('хохмач', max_results=i).to_dict()
-    for k in range(i):
-        likes = like('https://www.youtube.com/' + res[k]['url_suffix'])
-        res[k]['likes'] = likes
+    i = 200
+    res = YoutubeSearch('kek', max_results=i).to_dict()
+    print(res)
+    # for k in range(i):
+    #     # likes = like('https://www.youtube.com/' + res[k]['url_suffix'])
+    #     # res[k]['likes'] = likes
         
-        with open('C:/GIT/NCFUcarddecoding/file.csv','a',newline='') as f:
-            w = csv.DictWriter(f,res[k].keys())
-            # w.writeheader()
-            w.writerow(res[k])
+    #     with open('C:/GIT/NCFUcarddecoding/file.csv','a',newline='',encoding='utf-8') as f:
+    #         w = csv.DictWriter(f,res[k].keys())
+    #         # w.writeheader()
+    #         w.writerow(res[k])
+    #         time.sleep(0.5)
         
 
 searcher()

@@ -2,6 +2,23 @@ import requests
 from bs4 import BeautifulSoup as BS
 import csv
 import time
+import json
+from selenium import webdriver
+
+driver = webdriver.Chrome(executable_path='C:/GIT/files/chromiumdriver/chromedriver.exe')
+
+url = 'https://nft.bigtime.gg/explore'
+# try:
+driver.get(url=url)
+time.sleep(5)
+k = driver.page_source
+
+with open('c:/git/files/nft2.html', 'w+',encoding='utf-8') as f:
+    f.write(k)
+    f.close()
+
+driver.close()
+driver.quit()
 class Parser:
     # HOST = "https://minfin.com.ua"
     # URL = "https://www.youtube.com/watch?v=gy_YlibMW6Q"
@@ -46,6 +63,17 @@ class Parser:
     }
     def __init__(self,url) -> None:
         self.url = url
+        
+    def get_apipage(self,url,params=''):
+        # for proxy in Parser.proxylist:
+        #     print(proxy)
+        self.url = url
+        self.r = requests.get(self.url, headers=Parser.HEADERS, params=params)
+                            #   es={"http://": proxy, "https://": proxy})
+        # src = self.r.text
+        # with open('c:/git/files/nft.html','w',encoding='utf-8') as file:
+        #     file.write(src)
+        return self.r
     
     def get_page(self, params=''):
         # for proxy in Parser.proxylist:
@@ -53,18 +81,19 @@ class Parser:
         self.r = requests.get(self.url, headers=Parser.HEADERS, params=params)
                             #   es={"http://": proxy, "https://": proxy})
         # src = self.r.text
-        # with open('c:/git/files/index.html','w',encoding='utf-8') as file:
+        # with open('c:/git/files/nft.html','w',encoding='utf-8') as file:
         #     file.write(src)
         return self.r
     
     def get_content(self):
-        # with open('c:/git/files/index.html','r',encoding='utf-8') as file:
-        #     src = file.read()
+        with open('c:/git/files/nft.html','r',encoding='utf-8') as file:
+            src = file.read()
         
-        soup = BS(self.get_page().text, 'html.parser')
-        # with open('C:/GIT/files/file.html', 'w', encoding='utf-8') as r:
+        soup = BS(src, 'lxml')
+        # with open('C:/GIT/files/nft.html', 'w', encoding='utf-8') as r:
         #     r.write(str(soup))
-        items = soup.find_all('div', 'iva-item-content-rejJg')
+        items = soup.find_all('div',class_='css-bqtb1z')
+        # print(items)
         cards = []
         # print(items)
         for item in items:
@@ -72,16 +101,27 @@ class Parser:
            
             cards.append(
                 {
-                  'title': item.find('h3').get_text().replace('\xa0',''),
-                  'link': 'https://www.avito.ru' + item.find('a').get('href'),
-                  'price':  item.find(class_='price-text-_YGDY text-text-LurtD text-size-s-BxGpL').get_text().replace('\xa0',''),
-                  'street': item.find(class_='geo-address-fhHd0 text-text-LurtD text-size-s-BxGpL').find('span').get_text(),
+                  'name': item.find('a',class_='chakra-linkbox__overlay css-1hnz6hu').get('href'),
+                #   'link': 'https://www.avito.ru' + item.find('a').get('href'),
+                #   'price':  item.find(class_='price-text-_YGDY text-text-LurtD text-size-s-BxGpL').get_text().replace('\xa0',''),
+                #   'street': item.find(class_='geo-address-fhHd0 text-text-LurtD text-size-s-BxGpL').find('span').get_text(),
                 }
             )
         print(cards)
         return cards
 
+    def get_api(self):
+        api = []
         
+        for i in self.get_content():
+            i = i['name'].split('/')[-1]
+            self.url= f"https://nft.bigtime.gg/api/market/collection/BT0/option-name/{i}/orders?page=1&pageSize=50&primary=false&sort=price-asc"
+            self.r = requests.get(self.url, headers=Parser.HEADERS, params='')
+                            #   es={"http://": proxy, "https://": proxy})
+            src = self.r.text
+            with open(f"c:/git/files/nft/{i}.json",'w',encoding='utf-8') as file:
+                json.dump(src,file,indent=4)
+            time.sleep(5)
         
         
         
@@ -92,20 +132,16 @@ def main():
     #         w = csv.DictWriter(f,res[0].keys())
     #         w.writeheader()
     #         f.close()
-    for q in range(3):
-        p = Parser(f'https://www.avito.ru/stavropol/kommercheskaya_nedvizhimost/sdam/drugoe-ASgBAQICAUSwCNRWAUCeww0Uhtk5?cd=1&district=289-290-291&f=ASgBAQECAkSwCNRW9BKk2gEBQJ7DDRSG2TkBRbYTFXsiZnJvbSI6bnVsbCwidG8iOjgwfQ&p={q}')
+    p = Parser(f'https://nft.bigtime.gg/explore')
         # p.get_content()
-        res = p.get_content()
-        for i in range(len(res)):
-            with open('C:/GIT/files/avitocomm.csv','a',encoding='utf-8')as f:
-                f.write(f"{res[i]['title']};{res[i]['link']};{res[i]['price']};{res[i]['street']}\n")
-                f.close()
+    p.get_api()
+       
             
         # for i in range(len(res)):
         #     with open('C:/GIT/files/avito.csv','a',encoding='cp-1251',newline='',) as f:
         #             w = csv.DictWriter(f,res[i].keys())
         #             w.writerow(res[i])
-        time.sleep(5)
+        
 if __name__ == '__main__':
     main()
         
