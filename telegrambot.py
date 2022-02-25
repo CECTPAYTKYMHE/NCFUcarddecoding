@@ -30,11 +30,20 @@ def registering(message):
         user_id = message.chat.id
         cursor.execute("INSERT INTO 'users' ('id', 'datetime_register') VALUES(?,?)",(user_id,dt))
         connect.commit()
-        bot.send_message(message.chat.id,'Привет, пользователь ' + message.from_user.username + ' зарегистрирован')
+        bot.send_message(message.chat.id,'Привет, вы зарегистрированы')
     else:
         bot.send_message(message.chat.id, 'Вы уже зарегистрированы')
-        bot.send_sticker(message.chat.id,sticker='f55bf319-3d94-4344-aa93-b2030d97db03')
     connect.close()
+    buttons(message)
+    
+def buttons(message):
+    markup = types.InlineKeyboardMarkup(row_width=1)
+    item1 = types.InlineKeyboardButton('Добавить URL',callback_data='seturl')
+    item2 = types.InlineKeyboardButton('Показать все мои URL',callback_data='getallurl')
+    item3 = types.InlineKeyboardButton('Удалить все мои URL',callback_data='deleteallurl')
+    markup.add(item1,item2,item3)
+    bot.send_message(message.chat.id, 'Нажимай', reply_markup=markup)
+    
     
 def save_url(message):
     user_id = message.chat.id
@@ -43,13 +52,15 @@ def save_url(message):
     cursor.execute("INSERT INTO 'urls' ('link_id','url') VALUES(?,?)",(user_id,message.text))
     connect.commit()
     connect.close()
+    buttons(message)
     
-@bot.message_handler(commands=['url'])
-def get_url(message):
-    sent = bot.send_message(message.chat.id, 'Введите url')
-    bot.register_next_step_handler(sent, save_url)
+# @bot.message_handler(commands=['url'])
+def set_url(message):
+        sent = bot.send_message(message.chat.id, 'Введите url')
+        bot.register_next_step_handler(sent, save_url)
+        
 
-@bot.message_handler(commands=['geturl'])
+# @bot.message_handler(commands=['geturl'])
 def get_all_my_url(message):
     user_id = message.chat.id 
     connect = sqlite3.connect('D:/GIT/bot/users.db')
@@ -58,12 +69,28 @@ def get_all_my_url(message):
     data = cursor.fetchall()
     for i in data:
         bot.send_message(message.chat.id,i)
+    buttons(message)
         
-    
+@bot.callback_query_handler(func=lambda call :True)  
+def callback(call):
+    if call.message:
+        if call.data == 'seturl':
+            set_url(call.message)
+        elif call.data == 'getallurl':
+            get_all_my_url(call.message)
+        elif call.data == 'deleteallurl':
+            delete_all_url(call.message)
+             
 
 @bot.message_handler(commands=['delete'])
-def delete(message):
-    pass
+def delete_all_url(message):
+    user_id = message.chat.id 
+    connect = sqlite3.connect('D:/GIT/bot/users.db')
+    cursor = connect.cursor()
+    cursor.execute(f"DELETE FROM urls WHERE link_id = {user_id}")
+    connect.commit()
+    connect.close()
+    buttons(message)
     
 
 
