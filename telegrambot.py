@@ -4,7 +4,7 @@ import sqlite3
 import time
 
 
-token=''
+token='5269012443:AAFbM7AKJLkN7senATwZvAcYkBQypud2dVA'
 bot=telebot.TeleBot(token)
 
 
@@ -17,6 +17,7 @@ def registering(message):
         datetime_register TEXT
         )""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS urls(
+        id INTEGER PRIMARY KEY,
         link_id INTEGER,
         url TEXT,
         FOREIGN KEY(link_id) REFERENCES users(id)
@@ -49,18 +50,21 @@ def save_url(message):
     user_id = message.chat.id
     connect = sqlite3.connect('D:/GIT/bot/users.db')
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO 'urls' ('link_id','url') VALUES(?,?)",(user_id,message.text))
+    cursor.execute('SELECT COUNT(*) from urls')
+    count = cursor.fetchone()[0]
+    count += 1
+    cursor.execute("INSERT INTO 'urls' (id,'link_id','url') VALUES(?,?,?)",(count,user_id,message.text))
     connect.commit()
     connect.close()
     buttons(message)
     
-# @bot.message_handler(commands=['url'])
+
 def set_url(message):
         sent = bot.send_message(message.chat.id, 'Введите url')
         bot.register_next_step_handler(sent, save_url)
         
 
-# @bot.message_handler(commands=['geturl'])
+
 def get_all_my_url(message):
     user_id = message.chat.id 
     connect = sqlite3.connect('D:/GIT/bot/users.db')
@@ -80,7 +84,21 @@ def callback(call):
             get_all_my_url(call.message)
         elif call.data == 'deleteallurl':
             delete_all_url(call.message)
-             
+
+def del_url(message):
+    sent = bot.send_message(message.chat.id, 'Введите номер удаляемого url')
+    bot.register_next_step_handler(sent, delete_url)
+    
+@bot.message_handler(commands=['delete'])
+def delete_url(message):
+    
+    user_id = message.chat.id 
+    connect = sqlite3.connect('D:/GIT/bot/users.db')
+    cursor = connect.cursor()
+    cursor.execute(f"DELETE FROM urls WHERE link_id = {user_id}")
+    connect.commit()
+    connect.close()
+    buttons(message)             
 
 @bot.message_handler(commands=['delete'])
 def delete_all_url(message):
