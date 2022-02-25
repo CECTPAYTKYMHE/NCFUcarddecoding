@@ -4,7 +4,7 @@ import sqlite3
 import time
 
 
-token='5269012443:AAFbM7AKJLkN7senATwZvAcYkBQypud2dVA'
+token=''
 bot=telebot.TeleBot(token)
 
 
