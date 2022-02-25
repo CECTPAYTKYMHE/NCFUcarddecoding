@@ -1,7 +1,7 @@
 import openpyxl
 from openpyxl_image_loader import SheetImageLoader
 import os,glob
-cwd = 'D:\\GIT\\Files\\employee170222\\'
+cwd = 'D:\\GIT\\Files\\employee180222\\'
 files = [f for f in glob.glob(cwd + '**/*.xlsx', recursive=True)]
 
 for file in files:
