@@ -1,8 +1,13 @@
-import sqlite3
-import time
-user_id = 12222
-dt = time.strftime('%Y/%m/%d %H:%M:%S')
-connect = sqlite3.connect('D:/GIT/bot/users.db')
-cursor = connect.cursor()
-cursor.execute("INSERT INTO 'users' ('id', 'datetime_register') VALUES(?,?)",(user_id,dt))
-connect.commit()
+# import sqlite3
+# import time
+# all = []
+# connect = sqlite3.connect('C:/GIT/bot/users.db')
+# cursor = connect.cursor()
+# cursor.execute(f"SELECT url,id FROM urls WHERE link_id = 687724238")
+# count = cursor.fetchall()
+# for i in count:
+#     all.append(i[1])
+# print(all)
+from urllib.parse import urlparse
+k = urlparse('https://www.wildberries.ru/catalog/11229881/detail.aspx?targetUrl=GP')
+print(k.netloc)
