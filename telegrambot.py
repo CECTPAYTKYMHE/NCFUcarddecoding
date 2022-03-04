@@ -2,11 +2,12 @@ import telebot
 from telebot import types
 import sqlite3
 import time
+from telebot import apihelper
 
-
-token='5269012443:AAFbM7AKJLkN7senATwZvAcYkBQypud2dVA'
+token='5174028836:AAFA9fKL8tLd5hs8FxEEvdhMD4k_v5I7ebM'
 bot=telebot.TeleBot(token)
 
+apihelper.proxy = {'https':'socks5://telegram:telegram@109.238.222.5:42401'}
 
 @bot.message_handler(commands=['start'])
 def registering(message):
