@@ -15,6 +15,7 @@ token = botsettings.token
 bot=telebot.TeleBot(token)
 
 
+
 @bot.message_handler(commands=['start'])
 def registering(message):
     connect = sqlite3.connect(botsettings.db)

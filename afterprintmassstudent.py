@@ -1,7 +1,7 @@
 import openpyxl
 import pandas as pd
 import glob
-cwd = 'D:\\GIT\\Files\\выгрузки\\241221\\last'
+cwd = 'D:/GIT/Files/student010322/last/'
 files = [f for f in glob.glob(cwd + '**/*.xlsx', recursive=True)]
 id = 0
 for file in files:
@@ -29,20 +29,20 @@ for file in files:
                 cardid = ws.cell(row=i, column=9).value
                 ws.cell(row=i, column=9).value = int(cardid)
             except:
-                log = open('D:\\GIT\\Files\\выгрузки\\241221\\last\\logs.txt', 'a')
-                log.write(f'Отсутствует номер карты в файле {file} в строке {i}\n')
+                log = open(f'{cwd}logs.txt', 'a')
+                log.write(f'Отсутствует номер карты в файле {file} в строке {i-1}\n')
                 log.close()
-            ws.cell(row=i, column=7).value = 'D:\\GIT\\files\\student\\photo\\' + photo
+            ws.cell(row=i, column=7).value = f'{cwd}photo\\' + photo
             ws.cell(row=i, column=8).value = 'Student'
             ws.cell(row=i, column=10).value = 'All turnstile'
             ws.cell(row=i, column=11).value = '34bit_noFAC'
             ws.cell(row=i, column=12).value = 'Standard'
             ws.cell(row=i, column=13).value = 'Студенты'
             i += 1
-        wb.save(filename = f'D:\\GIT\\Files\\выгрузки\\241221\\last\\готовое\\{id}.xlsx')
-        filexslx = f'D:\\GIT\\Files\\выгрузки\\241221\\last\\готовое\\{id}.xlsx'
+        wb.save(filename = f'{cwd}готовое\\{id}.xlsx')
+        filexslx = f'{cwd}готовое\\{id}.xlsx'
         data_xls = pd.read_excel(filexslx, dtype=str, index_col=None)
-        data_xls.to_csv(f'D:\\GIT\\Files\\выгрузки\\241221\\last\\готовое\\csv\\{id}.csv', encoding='cp1251', index=False)
+        data_xls.to_csv(f'{cwd}готовое\\csv\\{id}.csv', encoding='cp1251', index=False)
     except:
         print(f'Какаято проблема в {file} в строке {i}')
         pass

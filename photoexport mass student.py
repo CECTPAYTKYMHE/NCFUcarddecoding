@@ -5,7 +5,7 @@ import csv
 import io
 import glob
 from PIL import Image
-cwd = 'D:\\GIT\\Files\\student010222\\'
+cwd = 'D:\\GIT\\Files\\student010322\\'
 files = [f for f in glob.glob(cwd + '**/*.xlsx', recursive=True)]
 Image.MAX_IMAGE_PIXELS = None
 try:
@@ -18,7 +18,7 @@ for file in files:
     try:
         #filein = cwd + '\\' + file
         wb = openpyxl.load_workbook(file)
-        ws = wb['ФИОиФото']
+        ws = wb.worksheets[0]
         i = 3 #начальная строка
         row = ws.max_row
         SheetImageLoader._images.clear()
