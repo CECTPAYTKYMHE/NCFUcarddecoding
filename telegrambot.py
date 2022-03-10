@@ -3,18 +3,21 @@ from telebot import types
 import sqlite3
 import time
 from urllib.parse import urlparse
+from wildbozon import get_content
+import threading
+import botsettings
 
 sites = ['www.ozon.ru','www.wildberries.ru']
 # ozon = 'www.ozon,ru'
 # wild = 'www.wildberries.ru'
 
-token='5269012443:AAFbM7AKJLkN7senATwZvAcYkBQypud2dVA'
+token = botsettings.token
 bot=telebot.TeleBot(token)
 
 
 @bot.message_handler(commands=['start'])
 def registering(message):
-    connect = sqlite3.connect('C:/GIT/bot/users.db')
+    connect = sqlite3.connect(botsettings.db)
     cursor = connect.cursor()
     cursor.execute("""CREATE TABLE IF NOT EXISTS users(
         id INTEGER PRIMARY KEY,
@@ -24,6 +27,8 @@ def registering(message):
         id INTEGER,
         link_id INTEGER,
         url TEXT,
+        price,
+        title,
         FOREIGN KEY(link_id) REFERENCES users(id)
         )""")
     connect.commit()
@@ -39,8 +44,11 @@ def registering(message):
     else:
         bot.send_message(message.chat.id, 'Вы уже зарегистрированы')
     connect.close()
+    keyboard = telebot.types.ReplyKeyboardMarkup(True)
+    keyboard.row('Меню')
     buttons(message)
-    
+
+@bot.message_handler(commands=['Меню'])
 def buttons(message):
     markup = types.InlineKeyboardMarkup(row_width=1)
     item1 = types.InlineKeyboardButton('Добавить URL',callback_data='seturl')
@@ -50,11 +58,11 @@ def buttons(message):
     markup.add(item1,item2,item3,item4)
     bot.send_message(message.chat.id, 'Выберите пункт меню', reply_markup=markup)
 
-def save_url(message):
+def save_url(message, title = None, price = None):
     id = 1
     all = []
     user_id = message.chat.id
-    connect = sqlite3.connect('C:/GIT/bot/users.db')
+    connect = sqlite3.connect(botsettings.db)
     cursor = connect.cursor()
     cursor.execute(f'SELECT id from urls WHERE link_id = {user_id}')
     count = cursor.fetchall()
@@ -68,7 +76,8 @@ def save_url(message):
     if urlparse(message.text).netloc not in sites:
         bot.send_message(message.chat.id, 'Это ссылка не OZON или Wildberries')
     else:
-        cursor.execute("INSERT INTO 'urls' (id,'link_id','url') VALUES(?,?,?)",(id,user_id,message.text))
+        title, price = get_content(message.text)
+        cursor.execute("INSERT INTO 'urls' (id,'link_id','url',title,price) VALUES(?,?,?,?,?)",(id,user_id,message.text,title,price))
         connect.commit()
         connect.close()
     buttons(message)
@@ -79,7 +88,7 @@ def set_url(message):
 
 def get_all_my_url(message):
     user_id = message.chat.id 
-    connect = sqlite3.connect('C:/GIT/bot/users.db')
+    connect = sqlite3.connect(botsettings.db)
     cursor = connect.cursor()
     cursor.execute(f"SELECT url,id FROM urls WHERE link_id = {user_id} ORDER BY id")
     data = cursor.fetchall()
@@ -110,7 +119,7 @@ def del_url(message):
 def delete_url(message):
     numbers = message.text.split()
     user_id = message.chat.id 
-    connect = sqlite3.connect('C:/GIT/bot/users.db')
+    connect = sqlite3.connect(botsettings.db)
     cursor = connect.cursor()
     for i in numbers:
         i = int(i)
@@ -122,20 +131,46 @@ def delete_url(message):
 # @bot.message_handler(commands=['deleteall'])
 def delete_all_url(message):
     user_id = message.chat.id 
-    connect = sqlite3.connect('C:/GIT/bot/users.db')
+    connect = sqlite3.connect(botsettings.db)
     cursor = connect.cursor()
     cursor.execute(f"DELETE FROM urls WHERE link_id = {user_id}")
     connect.commit()
     connect.close()
     buttons(message)
     
-
+def check_price():
+    while True:
+        connect = sqlite3.connect(botsettings.db)
+        cursor = connect.cursor()
+        cursor.execute("SELECT link_id,url,price,id FROM urls")
+        data = cursor.fetchall()
+        for i in data:
+            title, price = get_content(i[1])
+            if int(price) < int(i[2]):
+                print('price<i2')
+                cursor.execute(f"UPDATE urls SET price = (?) WHERE link_id = {i[0]} AND id = {i[3]} ",(price,))
+                connect.commit()
+                print(f'{i[1]}\n{"~"*20}\nТовар подешевел на {int(i[2]) - int(price)}')
+                bot.send_message(i[0],f'{i[1]}\n{"~"*20}\nТовар подешевел на {int(i[2]) - int(price)}')
+        connect.close()
+        time.sleep(1800)
+        
 
     
 # Запускаем бота
 def main():
     bot.polling(none_stop=True, interval=0)
+    
 if __name__ == '__main__':
-    main()
+    try:
+        thread1 = threading.Thread(target=check_price)
+        thread1.start()
+        thread2 = threading.Thread(target=main)
+        thread2.start()
+    except KeyboardInterrupt:
+        print ('Interrupted')
+        exit(0)
+
+  
 
 
